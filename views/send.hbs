@@ -1,0 +1,66 @@
+<div class="container mt-5">
+    <h2 class="text-center">Người Gửi: Tạo và Ký Hợp Đồng</h2>
+    <form id="sendContractForm" method="POST" action="/api/sign-contract">
+        <!-- Tạo khóa -->
+        <div class="card p-3 mb-4">
+            <h4 class="card-title">Tạo khóa</h4>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="autoKey" checked>
+                <label class="form-check-label" for="autoKey">Tự động sinh khóa</label>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label for="inputP" class="form-label">Nhập P</label>
+                    <input type="text" id="inputP" class="form-control" placeholder="Số nguyên tố P">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputQ" class="form-label">Nhập Q</label>
+                    <input type="text" id="inputQ" class="form-control" placeholder="Số nguyên tố Q">
+                </div>
+                <div class="col-md-4">
+                    <label for="publicKey" class="form-label">Khóa công khai</label>
+                    <input type="text" id="publicKey" class="form-control" disabled>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nội dung hợp đồng -->
+        <div class="card p-3 mb-4">
+            <h4 class="card-title">Nội dung bản tin</h4>
+            <div class="mb-3">
+                <label for="contractContent" class="form-label">Nội dung</label>
+                <textarea id="contractContent" name="content" class="form-control" rows="4"></textarea>
+            </div>
+        </div>
+
+        <!-- Chọn phương thức ký -->
+        <div class="card p-3 mb-4">
+            <h4 class="card-title">Phương thức ký</h4>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="method" id="signOnly" value="sign-only">
+                <label class="form-check-label" for="signOnly">Ký không mã hóa</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="method" id="signEncrypt" value="sign-encrypt">
+                <label class="form-check-label" for="signEncrypt">Ký - Mã hóa</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="method" id="encryptSign" value="encrypt-sign">
+                <label class="form-check-label" for="encryptSign">Mã hóa - Ký</label>
+            </div>
+        </div>
+
+        <!-- Nút hành động -->
+        <button type="submit" class="btn btn-success">Ký và Gửi</button>
+        <button type="reset" class="btn btn-secondary">Hủy</button>
+        <!-- Nút quay lại -->
+        <button type="button" class="btn btn-primary" onclick="goBack()">Quay lại</button>
+    </form>
+
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo RSA và Chữ ký số</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { height: 100%; }
+    </style>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Người Gửi</h2>
+                        <div class="mb-3">
+                            <h3>Tạo khóa</h3>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="auto-generate" checked>
+                                <label class="form-check-label" for="auto-generate">Tự động sinh khóa</label>
+                            </div>
+                            <div class="mt-2">
+                                <label for="input-p" class="form-label">Nhập P:</label>
+                                <input type="number" class="form-control" id="input-p" disabled>
+                            </div>
+                            <div class="mt-2">
+                                <label for="input-q" class="form-label">Nhập Q:</label>
+                                <input type="number" class="form-control" id="input-q" disabled>
+                            </div>
+                            <div class="mt-3">
+                                <p>Khóa Công khai: <span id="public-key"></span></p>
+                                <p>Bí mật: <span id="private-key"></span></p>
+                                <p>Phi N: <span id="phi-n"></span></p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <h3>Nội Dung Bản Tin</h3>
+                            <input type="file" class="form-control mb-2" id="file-input">
+                            <textarea class="form-control" id="message-content" rows="4"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="send-type" id="sign" value="sign">
+                                <label class="form-check-label" for="sign">Ký không mã hóa</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="send-type" id="encrypt-sign" value="encrypt-sign">
+                                <label class="form-check-label" for="encrypt-sign">Ký - Mã hóa</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="send-type" id="encrypt-sign-reverse" value="encrypt-sign-reverse">
+                                <label class="form-check-label" for="encrypt-sign-reverse">Mã hóa - Ký</label>
+                            </div>
+                        </div>
+                        <button id="send-button" class="btn btn-primary me-2">Ký và Gửi</button>
+                        <button id="clear-button" class="btn btn-secondary">Hủy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Sau Quá Trình Ký Và Gửi</h2>
+                        <div class="mb-3">
+                            <h3>Bản Tin</h3>
+                            <textarea class="form-control" id="encrypted-content" rows="4" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <h3>Chữ Ký Số</h3>
+                            <textarea class="form-control" id="digital-signature-content" rows="4" readonly></textarea>
+                        </div>
+                        <button id="verify-button" class="btn btn-primary">Kiểm Tra</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Người Nhận</h2>
+                        <div class="mb-3">
+                            <h3>Giải Mã Bản Tin</h3>
+                            <textarea class="form-control" id="decrypted-content" rows="4" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <h3>Giải Mã Chữ Ký</h3>
+                            <textarea class="form-control" id="verified-signature" rows="4" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <h3>Kết Luận</h3>
+                            <textarea class="form-control" id="conclusion-content" rows="4" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

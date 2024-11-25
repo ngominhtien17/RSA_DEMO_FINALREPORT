@@ -1,0 +1,126 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
+/* Căn chỉnh label */
+#loginForm label {
+    max-width: 400px; /* Cùng kích thước với ô nhập */
+    margin: 0 auto; /* Căn giữa */
+    display: block; /* Hiển thị dạng khối */
+    text-align: left; /* Căn chữ về bên trái */
+    font-size: 14px; /* Điều chỉnh kích thước chữ */
+    color: #333; /* Màu sắc label */
+    margin-bottom: 5px; /* Khoảng cách với ô nhập */
+}
+
+/* Đảm bảo ô nhập khớp với label */
+#loginForm input[type="email"],
+#loginForm input[type="password"] {
+    max-width: 400px; /* Giới hạn chiều rộng */
+    margin: 0 auto; /* Căn giữa */
+    display: block; /* Đảm bảo hiển thị dạng khối */
+    padding: 10px; /* Tăng khoảng cách trong ô nhập */
+    font-size: 14px; /* Kích thước chữ trong ô nhập */
+    border: 1px solid #ccc; /* Viền mờ */
+    border-radius: 4px; /* Bo góc */
+}
+
+/* Chỉnh nút đăng nhập */
+#loginButton {
+    max-width: 400px;
+    width: 100%; /* Chiều ngang đầy đủ */
+    margin: 10px auto;
+    display: block;
+    padding: 10px; /* Tăng khoảng cách trong nút */
+    background-color: #28a745; /* Màu nền xanh lá */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Bỏ viền */
+    border-radius: 4px; /* Bo góc */
+    cursor: pointer;
+}
+
+#loginButton:hover {
+    background-color: #218838; /* Đổi màu khi hover */
+}
+
+/* Căn chỉnh toàn bộ form */
+#registerForm {
+    max-width: 400px; /* Giới hạn chiều rộng */
+    margin: 0 auto; /* Căn giữa form */
+    padding: 20px; /* Khoảng cách bên trong */
+    background-color: #f9f9f9; /* Màu nền form nhạt */
+    border: 1px solid #ddd; /* Viền nhạt */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+/* Định dạng label */
+#registerForm label {
+    font-size: 14px; /* Kích thước chữ */
+    color: #333; /* Màu chữ đậm */
+    margin-bottom: 5px; /* Khoảng cách với ô nhập */
+    display: block; /* Đảm bảo label hiển thị dạng khối */
+}
+
+/* Định dạng ô nhập */
+#registerForm input[type="text"],
+#registerForm input[type="email"],
+#registerForm input[type="password"] {
+    max-width: 400px; /* Đảm bảo đồng bộ chiều rộng */
+    padding: 10px; /* Khoảng cách bên trong */
+    margin-bottom: 15px; /* Khoảng cách giữa các ô */
+    border: 1px solid #ccc; /* Viền nhạt */
+    border-radius: 4px; /* Bo góc */
+    font-size: 14px; /* Kích thước chữ */
+    display: block; /* Hiển thị dạng khối */
+    width: 100%; /* Chiếm đầy chiều ngang */
+}
+
+/* Định dạng nút đăng ký */
+#registerButton {
+    width: 100%; /* Chiếm toàn bộ chiều ngang */
+    padding: 10px; /* Khoảng cách bên trong nút */
+    font-size: 16px; /* Kích thước chữ */
+    background-color: #007bff; /* Màu nền xanh */
+    color: #fff; /* Màu chữ trắng */
+    border: none; /* Bỏ viền */
+    border-radius: 4px; /* Bo góc */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng khi hover */
+}
+
+#registerButton:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+}
+
+/* Định dạng liên kết "Đăng nhập" */
+.text-primary {
+    color: #007bff;
+    text-decoration: none; /* Bỏ gạch chân */
+}
+
+.text-primary:hover {
+    text-decoration: underline; /* Gạch chân khi hover */
+    color: #0056b3;
+}
+
+/* Định dạng dòng "Đã có tài khoản" */
+p.text-center {
+    margin-top: 15px; /* Khoảng cách bên trên */
+    font-size: 14px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    text-align: center; /* Căn giữa nội dung */
+}
+
+

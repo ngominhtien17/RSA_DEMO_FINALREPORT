@@ -1,0 +1,34 @@
+<div class="container mt-5">
+    <h2 class="text-center">Người Nhận: Giải mã và Kiểm tra Hợp Đồng</h2>
+    <form id="receiveContractForm" method="POST" action="/api/verify-contract">
+        <!-- Nhận hợp đồng -->
+        <div class="card p-3 mb-4">
+            <h4 class="card-title">Giải mã bản tin</h4>
+            <textarea id="decodedMessage" class="form-control" rows="4" disabled></textarea>
+        </div>
+
+        <!-- Giải mã chữ ký -->
+        <div class="card p-3 mb-4">
+            <h4 class="card-title">Giải mã chữ ký</h4>
+            <textarea id="decodedSignature" class="form-control" rows="4" disabled></textarea>
+        </div>
+
+        <!-- Kết luận -->
+        <div class="card p-3 mb-4">
+            <h4 class="card-title">Kết luận</h4>
+            <textarea id="verificationResult" class="form-control" rows="2" disabled></textarea>
+        </div>
+
+        <!-- Nút kiểm tra -->
+        <button type="submit" class="btn btn-success">Kiểm tra</button>
+        <!-- Nút quay lại -->
+        <button type="button" class="btn btn-primary" onclick="goBack()">Quay lại</button>
+    </form>
+
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.sender, .process, .receiver {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1;
+}
+
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.key-inputs, .key-display {
+    margin-bottom: 10px;
+}
+
+input[type="number"], input[type="file"] {
+    margin-bottom: 5px;
+}
+
+.send-options {
+    margin-bottom: 10px;
+}
+
+.send-options label {
+    display: block;
+    margin-bottom: 5px;
+}
