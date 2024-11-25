@@ -48,3 +48,14 @@ export const verifyContract = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const getSend = async (req, res) => {
+    const publicKey = req.user.publicKey;
+    res.render('send', { publicKey });
+}
+
+export const getReceive = async (req, res) => {
+    res.render('receive', { user: req.user });
+}
+
+

@@ -5,7 +5,7 @@ const isAuthenticated = (req, res, next) => {
     if (!token) {
         req.session.returnTo = req.originalUrl;
         // Nếu không có token, chuyển hướng đến trang đăng nhập
-        return res.redirect('/login');
+        return res.redirect('/auth/login');
     }
 
     try {
@@ -14,9 +14,9 @@ const isAuthenticated = (req, res, next) => {
         res.locals.user = decoded; // Lưu thông tin người dùng vào res.locals.user
         next(); // Chuyển tiếp đến route tiếp theo
     } catch (error) {
-        console.error('Token không hợp lệ:', error.message);
-        if (req.path !== '/login') {
-            return res.redirect('/login'); // Chuyển hướng đến trang đăng nhập
+        console.error('Token không hợp lệ ở middleware:', error.message);
+        if (req.path !== '/auth/login') {
+            return res.redirect('/auth/login'); // Chuyển hướng đến trang đăng nhập
         } else {
             res.status(401).send('Unauthorized: Invalid token');
         }

@@ -4,10 +4,6 @@
         <!-- Tạo khóa -->
         <div class="card p-3 mb-4">
             <h4 class="card-title">Tạo khóa</h4>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="autoKey" checked>
-                <label class="form-check-label" for="autoKey">Tự động sinh khóa</label>
-            </div>
             <div class="row mt-3">
                 <div class="col-md-4">
                     <label for="inputP" class="form-label">Nhập P</label>
@@ -19,9 +15,10 @@
                 </div>
                 <div class="col-md-4">
                     <label for="publicKey" class="form-label">Khóa công khai</label>
-                    <input type="text" id="publicKey" class="form-control" disabled>
+                    <input type="text" id="publicKey" class="form-control" value="{{publicKey}}" disabled>
                 </div>
             </div>
+            <button type="button" class="btn btn-primary mt-3" onclick="updateKey()">Cập nhật khóa</button>
         </div>
 
         <!-- Nội dung hợp đồng -->
@@ -62,5 +59,30 @@
 <script>
     function goBack() {
         window.history.back();
+    }
+
+    function updateKey() {
+        const p = document.getElementById('inputP').value;
+        const q = document.getElementById('inputQ').value;
+        if (p && q) {
+            fetch('/api/update-key', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ p, q })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('publicKey').value = data.newPublicKey;
+                    alert('Khóa đã được cập nhật thành công!');
+                } else {
+                    alert('Có lỗi xảy ra khi cập nhật khóa.');
+                }
+            });
+        } else {
+            alert('Vui lòng nhập cả P và Q.');
+        }
     }
 </script>

@@ -56,7 +56,7 @@ export const loginUser = async (req, res) => {
 
         // Tạo token JWT với thông tin người dùng
         const token = jwt.sign(
-            { id: user._id, name: user.name, email: user.email},
+            { id: user._id, name: user.name, email: user.email, publicKey: user.publicKey, privateKey: user.privateKey},
             process.env.JWT_SECRET || 'secretkey',
             { expiresIn: '1d' }
         );
@@ -69,8 +69,27 @@ export const loginUser = async (req, res) => {
             sameSite: 'lax', // Cookie không bị gửi trong yêu cầu cross-site không cần thiết
         });
         
-        res.status(200).json({ message: 'Đăng nhập thành công', user: { id: user._id, name: user.name, email: user.email } });
+        res.status(200).json({ message: 'Đăng nhập thành công', user: { id: user._id, name: user.name, email: user.email, publicKey: user.publicKey, privateKey: user.privateKey } });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getLogin = async (req, res) => {
+    const token = req.cookies?.token;
+    // Nếu đã có token hợp lệ, chuyển hướng về trang chủ
+   if (token) {
+       try {
+           const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secretkey');
+           console.log(decoded);
+           return res.redirect('/'); // Chuyển hướng về trang chủ nếu đã đăng nhập
+       } catch (error) {
+           
+       }
+   }
+    res.render('login');
+}
+
+export const getRegister = async (req, res) => {
+    res.render('register');
+}
