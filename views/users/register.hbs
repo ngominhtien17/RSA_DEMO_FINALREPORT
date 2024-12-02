@@ -1,6 +1,6 @@
 <div class="container mt-5">
     <h2 class="text-center">Đăng ký tài khoản</h2>
-    <form id="registerForm">
+    <form id="registerForm" action="/users/register" method="POST">
         <div class="mb-3">
             <label for="name" class="form-label">Tên</label>
             <input type="text" id="name" name="name" class="form-control" required>
@@ -13,10 +13,10 @@
             <label for="password" class="form-label">Mật khẩu</label>
             <input type="password" id="password" name="password" class="form-control" required>
         </div>
-        <button type="button" id="registerButton" class="btn btn-primary">Đăng ký</button>
+        <button type="submit" id="registerButton" class="btn btn-primary">Đăng ký</button>
     </form>
 
     <p class="text-center mt-3">
-        Đã có tài khoản? <a href="/auth/login" class="text-primary">Đăng nhập</a>
+        Đã có tài khoản? <a href="/users/login" class="text-primary">Đăng nhập</a>
     </p>
 </div>

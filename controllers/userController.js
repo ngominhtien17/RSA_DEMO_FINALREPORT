@@ -1,91 +1,112 @@
-import crypto from 'crypto';
-import User from '../models/User.js';
+import { generateKeyPair, createUser, findUserByEmail, validatePassword } from '../services/UserService.js';
+import { generateToken, verifyToken } from '../services/AuthService.js';
 
+// Trang đăng ký người dùng
+export const getRegister = (req, res) => {
+    res.render('users/register');
+};
+// Trang đăng nhập người dùng
+export const getLogin = (req, res) => {
+    res.render('users/login');
+};
 
-export const generateKeys = async (req, res) => {
+// Trang chúc mừng đăng ký thành công
+export const getSuccessPage = (req, res) => {
+    const { privateKey } = req.query;
+    res.render('users/success', { privateKey });
+};
+
+// Đăng ký người dùng
+export const register = async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { name, email, password, role } = req.body;
 
-        const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-            modulusLength: 2048,
+        // Kiểm tra email đã tồn tại
+        const existingUser = await findUserByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({ 
+                error: 'Email đã được sử dụng' 
+            });
+        }
+
+        // Tạo user mới và lấy privateKey
+        const { user, privateKey } = await createUser({ 
+            name, 
+            email, 
+            password,
+            role 
         });
 
-        const user = new User({ name, email, publicKey, privateKey });
-        await user.save();
+        // Loại bỏ password trước khi gửi response
+        const userResponse = user.toObject();
+        delete userResponse.password;
 
-        res.status(201).json({ message: 'Keys generated successfully', user });
+        // Chuyển hướng đến trang chúc mừng
+        res.redirect(`/users/success?privateKey=${encodeURIComponent(privateKey)}`);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ 
+            error: 'Lỗi khi đăng ký: ' + err.message 
+        });
     }
 };
 
-export const updateKeys = async (req, res) => {
-    const { p, q } = req.body;
-    if (!p || !q) {
-        return res.status(400).json({ success: false, message: 'Thiếu P hoặc Q' });
+// Đăng nhập người dùng
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Tìm user theo email
+        const user = await findUserByEmail(email);
+        if (!user) {
+            return res.status(401).json({ 
+                error: 'Email không tồn tại' 
+            });
+        }
+
+        // Kiểm tra password
+        const isValidPassword = await validatePassword(
+            password, 
+            user.password
+        );
+        
+        if (!isValidPassword) {
+            return res.status(401).json({ 
+                error: 'Mật khẩu không đúng' 
+            });
+        }
+
+        // Tạo JWT token
+        const token = generateToken(user);
+
+        // Set cookie
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'lax',
+        });
+
+        // Chuyển đổi đối tượng người dùng và xóa mật khẩu
+        const userResponse = user.toObject();
+        delete userResponse.password;
+
+        // Trả về thông tin người dùng
+        res.redirect('/');
+
+    } catch (err) {
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.status(500).json({ 
+                error: 'Lỗi khi đăng nhập: ' + err.message 
+            });
+        }
+        res.status(500).render('login', { 
+            error: 'Lỗi khi đăng nhập: ' + err.message 
+        });
     }
-     try {
-        // Tạo cặp khóa mới từ P và Q
-        const { publicKey, privateKey } = generateKeyPairFromPQ(p, q);
-         // Cập nhật khóa công khai và khóa riêng tư trong cơ sở dữ liệu
-        await User.updateOne({ _id: req.user.id }, { publicKey, privateKey });
-         res.json({ success: true, publicKey });
-    } catch (error) {
-        console.error('Lỗi khi cập nhật khóa:', error);
-        res.status(500).json({ success: false, message: 'Lỗi máy chủ' });
-    }
-}
+};
 
-// Hàm tạo cặp khóa từ P và Q
-function generateKeyPairFromPQ(p, q) {
-    const primeP = BigInt(p);
-    const primeQ = BigInt(q);
-    const n = primeP * primeQ;
-    const phi = (primeP - 1n) * (primeQ - 1n);
-    const e = 65537n;
-
-    if (gcd(e, phi) !== 1n) {
-        throw new Error('e và phi(n) không phải là số nguyên tố cùng nhau');
-    }
-
-    // Tính d, khóa riêng tư
-    const d = modInverse(e, phi);
-
-    // Trả về cặp khóa
-    return {
-        publicKey: `PublicKey(n=${n}, e=${e})`,
-        privateKey: `PrivateKey(n=${n}, d=${d})`
-    };
-}
-
-// Hàm tính ước chung lớn nhất (GCD)
-function gcd(a, b) {
-    while (b !== 0n) {
-        const temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
-}
-
-// Hàm tính nghịch đảo modulo
-function modInverse(a, m) {
-    let m0 = m, t, q;
-    let x0 = 0n, x1 = 1n;
-
-    if (m === 1n) return 0n;
-
-    while (a > 1n) {
-        q = a / m;
-        t = m;
-        m = a % m;
-        a = t;
-        t = x0;
-        x0 = x1 - q * x0;
-        x1 = t;
-    }
-
-    if (x1 < 0n) x1 += m0;
-
-    return x1;
-}
+// Đăng xuất người dùng
+export const logout = (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/users/login');
+};

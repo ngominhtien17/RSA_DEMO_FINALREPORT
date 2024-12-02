@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 
 const ContractSchema = new mongoose.Schema({
-  sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  receiver: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  content: String,
-  signature: String,
-  publicKey: String,
-  status: { type: String, default: 'Pending' },
-});
+  title: { type: String, required: true },
+  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  signerIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  contractFilePath: { type: String, required: true },
+  status: { type: String, enum: ['pending', 'signed', 'completed'], default: 'pending' },
+}, { timestamps: true });
 
 export default mongoose.model('Contract', ContractSchema);

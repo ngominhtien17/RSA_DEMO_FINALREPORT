@@ -28,7 +28,16 @@ app.engine('hbs', expressHandlebars.engine({
     extname: '.hbs',
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
-    partialsDir: path.join(__dirname, 'views/partials')
+    partialsDir: path.join(__dirname, 'views/partials'),
+    helpers: {
+        encodeURIComponent: function (str) {
+            return encodeURIComponent(str);
+        }
+    },
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true
+    }
 }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));

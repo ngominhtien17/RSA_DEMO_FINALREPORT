@@ -1,0 +1,25 @@
+<div class="container mt-5">
+    <h2 class="mb-4">Danh sách Hợp đồng của Tôi</h2>
+    <p>Tổng số đã ký: {{totalSigned}}</p>
+    <p>Tổng số chưa ký: {{totalPending}}</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tiêu đề</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each contracts}}
+            <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.status}}</td>
+                <td>
+                    <a href="/contracts/{{this._id}}" class="btn btn-primary btn-sm">Xem & Ký</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

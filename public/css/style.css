@@ -123,4 +123,23 @@ p.text-center {
     text-align: center; /* Căn giữa nội dung */
 }
 
+#loginButton, #downloadKey {
+    display: block;
+    margin: 10px auto;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    width: 200px; /* Đặt độ rộng cố định nếu cần */
+    font-size: 16px; /* Đặt kích thước chữ nếu cần */
+}
+
+#loginButton:hover, #downloadKey:hover {
+    background-color: #0056b3;
+}
+
 

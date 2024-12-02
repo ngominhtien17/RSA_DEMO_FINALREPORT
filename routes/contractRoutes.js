@@ -1,19 +1,10 @@
 import express from 'express';
-import { signContract, verifyContract, getSend, getReceive } from '../controllers/contractController.js';
-
+import { createContractController, getUserContractsController, createContractPage, viewContractController } from '../controllers/contractController.js';
 const router = express.Router();
+import { upload } from '../uploads/upload.js';
 
-
-// Endpoint gửi hợp đồng
-router.get('/send', getSend);
-
-// Endpoint nhận hợp đồng
-router.get('/receive', getReceive);
-
-// Endpoint ký hợp đồng
-router.post('/sign', signContract);
-
-// Endpoint xác thực hợp đồng
-router.post('/verify', verifyContract);
-
+router.get('/create', createContractPage);
+router.post('/create', upload.single('contractFile'), createContractController);
+router.get('/user', getUserContractsController);
+router.get('/:id', viewContractController);
 export default router;

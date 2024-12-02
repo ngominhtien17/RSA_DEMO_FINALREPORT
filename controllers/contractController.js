@@ -1,61 +1,99 @@
-import crypto from 'crypto';
 import Contract from '../models/Contract.js';
+import { createContract, getContractsByUser, getContractById, getUserContracts, updateContractSigningStatus } from '../services/ContractService.js';
 import User from '../models/User.js';
+//trang tạo hợp đồng
+export const createContractPage = (req, res) => {
+    res.render('contracts/createContract');
+}
 
-// Ký hợp đồng
-export const signContract = async (req, res) => {
+// Tạo hợp đồng
+export const createContractController = async (req, res, next) => {
     try {
-        const { userId, content } = req.body;
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (!req.file) {
+            return res.status(400).json({ message: 'Vui lòng tải lên file PDF.' });
+        }
 
-        const hash = crypto.createHash('sha256').update(content).digest('hex');
-        const signature = crypto.privateEncrypt(user.privateKey, Buffer.from(hash));
+        // Tìm kiếm ObjectId của người ký dựa trên email
+        const signerEmails = req.body.signerEmails.split(',').map(email => email.trim());
+        const signerIds = await User.find({ email: { $in: signerEmails } }).select('_id');
 
-        const contract = new Contract({
-            sender: user._id,
-            content,
-            signature: signature.toString('base64'),
-            publicKey: user.publicKey,
+        const contractData = {
+            title: req.body.title,
+            signerEmails,
+            signerIds: signerIds.map(user => user._id), // Lưu trữ ObjectId
+            creatorId: req.user.id,
+            contractFilePath: `uploads/contracts/${req.file.filename}`
+        };
+
+        const contract = await createContract(contractData);
+        res.redirect('/');
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+// Lấy hợp đồng của người dùng
+export const getContractsController = async (req, res, next) => {
+    try {
+        const contracts = await getContractsByUser(req.user.id);
+        res.json(contracts);
+    } catch (error) {
+        next(error);
+    }
+}
+
+// Lấy hợp đồng theo ID
+export const getContractByIdController = async (req, res, next) => {
+    try {
+        const contract = await getContractById(req.params.contractId);
+        res.json(contract);
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+// Lấy danh sách hợp đồng mà người dùng là người ký
+export const getUserContractsController = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const contracts = await getUserContracts(userId);
+
+        const signedContracts = contracts.filter(contract => contract.signedBy && contract.signedBy.includes(userId));
+        const pendingContracts = contracts.filter(contract => contract.signedBy && !contract.signedBy.includes(userId));
+
+        res.render('contracts/userContract', {
+            contracts,
+            totalSigned: signedContracts.length,
+            totalPending: pendingContracts.length
         });
-        await contract.save();
-
-        res.status(201).json({ message: 'Contract signed successfully', contract });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    } catch (error) {
+        next(error);
     }
 };
 
-// Xác thực hợp đồng
-export const verifyContract = async (req, res) => {
+// Xem chi tiết hợp đồng và hiển thị file PDF
+export const viewContractController = async (req, res, next) => {
     try {
-        const { contractId } = req.body;
-        const contract = await Contract.findById(contractId).populate('sender');
-        if (!contract) return res.status(404).json({ message: 'Contract not found' });
-
-        const hash = crypto.createHash('sha256').update(contract.content).digest('hex');
-        const decryptedHash = crypto.publicDecrypt(
-            contract.publicKey,
-            Buffer.from(contract.signature, 'base64')
-        ).toString('utf-8');
-
-        const isValid = hash === decryptedHash;
-        contract.status = isValid ? 'Verified' : 'Invalid';
-        await contract.save();
-
-        res.status(200).json({ message: 'Contract verified', isValid });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        const contract = await getContractById(req.params.id);
+        if (!contract) {
+            return res.status(404).send('Hợp đồng không tồn tại');
+        }
+        console.log(contract);
+        res.render('contracts/viewContract', { contract });
+    } catch (error) {
+        next(error);
     }
 };
 
-export const getSend = async (req, res) => {
-    const publicKey = req.user.publicKey;
-    res.render('send', { publicKey });
-}
-
-export const getReceive = async (req, res) => {
-    res.render('receive', { user: req.user });
-}
-
-
+// Ký hoặc từ chối hợp đồng
+export const signContractController = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        await updateContractSigningStatus(req.params.id, userId, req.body.action);
+        res.redirect('/contracts');
+    } catch (error) {
+        next(error);
+    }
+};

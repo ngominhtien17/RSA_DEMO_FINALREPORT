@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 alert('Đăng ký thành công! Vui lòng đăng nhập.');
-                window.location.href = '/login'; // Chuyển hướng đến trang đăng nhập
+                window.location.href = '/auth/login'; // Chuyển hướng đến trang đăng nhập
             } else {
                 alert('Lỗi: ' + data.message);
             }

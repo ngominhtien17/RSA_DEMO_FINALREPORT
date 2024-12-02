@@ -9,15 +9,15 @@
                         <span class="nav-link">Chào, {{user.name}}</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth/logout">Đăng xuất</a>
+                        <a class="nav-link" href="/users/logout">Đăng xuất</a>
                     </li>
                 {{else}}
                     <!-- Hiển thị khi chưa đăng nhập -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth/login">Đăng nhập</a>
+                        <a class="nav-link" href="/users/login">Đăng nhập</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth/register">Đăng ký</a>
+                        <a class="nav-link" href="/users/register">Đăng ký</a>
                     </li>
                 {{/if}}
             </ul>

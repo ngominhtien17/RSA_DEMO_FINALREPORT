@@ -13,42 +13,34 @@
                     <label for="inputQ" class="form-label">Nhập Q</label>
                     <input type="text" id="inputQ" class="form-control" placeholder="Số nguyên tố Q">
                 </div>
-                <div class="col-md-4">
-                    <label for="publicKey" class="form-label">Khóa công khai</label>
-                    <input type="text" id="publicKey" class="form-control" value="{{publicKey}}" disabled>
-                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="publicKey" class="form-label">Khóa công khai</label>
+                <textarea id="publicKey" class="form-control" rows="3" disabled>{{user.publicKey}}</textarea>
             </div>
             <button type="button" class="btn btn-primary mt-3" onclick="updateKey()">Cập nhật khóa</button>
         </div>
 
         <!-- Nội dung hợp đồng -->
         <div class="card p-3 mb-4">
-            <h4 class="card-title">Nội dung bản tin</h4>
+            <h4 class="card-title">Nội dung hợp đồng</h4>
             <div class="mb-3">
-                <label for="contractContent" class="form-label">Nội dung</label>
-                <textarea id="contractContent" name="content" class="form-control" rows="4"></textarea>
+                <label for="contractFile" class="form-label">Tải lên hợp đồng (PDF, DOCX)</label>
+                <input type="file" id="contractFile" name="contractFile" class="form-control" accept=".pdf, .docx">
             </div>
         </div>
 
-        <!-- Chọn phương thức ký -->
+        <!-- Thẻ hiển thị kết quả hash -->
         <div class="card p-3 mb-4">
-            <h4 class="card-title">Phương thức ký</h4>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="method" id="signOnly" value="sign-only">
-                <label class="form-check-label" for="signOnly">Ký không mã hóa</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="method" id="signEncrypt" value="sign-encrypt">
-                <label class="form-check-label" for="signEncrypt">Ký - Mã hóa</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="method" id="encryptSign" value="encrypt-sign">
-                <label class="form-check-label" for="encryptSign">Mã hóa - Ký</label>
+            <div id="hashResult" class="mt-3">
+                <h4 class="card-title">Hash của hợp đồng:</h4> 
+                <textarea id="fileHash" class="form-control" readonly></textarea>
             </div>
         </div>
 
         <!-- Nút hành động -->
-        <button type="submit" class="btn btn-success">Ký và Gửi</button>
+        <button type="button" class="btn btn-success" onclick="signContract()">Ký</button>
+        <button type="button" class="btn btn-success" onclick="sendContract()" disabled id="sendButton">Gửi</button>
         <button type="reset" class="btn btn-secondary">Hủy</button>
         <!-- Nút quay lại -->
         <button type="button" class="btn btn-primary" onclick="goBack()">Quay lại</button>
@@ -84,5 +76,45 @@
         } else {
             alert('Vui lòng nhập cả P và Q.');
         }
+    }
+
+    function signContract() {
+        const fileInput = document.getElementById('contractFile');
+        if (fileInput.files.length === 0) {
+            alert('Vui lòng chọn một tệp hợp đồng.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('contractFile', fileInput.files[0]);
+
+        fetch('/upload-contract', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                console.log('File hash:', data.fileHash);
+
+                // Hiển thị hash của tệp
+                document.getElementById('fileHash').textContent = data.fileHash;
+
+                // Kích hoạt nút gửi sau khi ký thành công
+                document.getElementById('sendButton').disabled = false;
+            } else {
+                alert('Có lỗi xảy ra khi xử lý tệp.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi gửi tệp.');
+        });
+    }
+
+    function sendContract() {
+        const form = document.getElementById('sendContractForm');
+        form.submit();
     }
 </script>
