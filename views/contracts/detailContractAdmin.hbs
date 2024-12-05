@@ -1,0 +1,32 @@
+<div class="container mt-5"></div>
+    <h2>Chi Tiết Hợp Đồng: {{contract.title}}</h2>
+    <p>Trạng Thái: {{contract.status}}</p>
+    <p>Người Tạo: {{contract.creatorId.name}}</p>
+    <p>email: {{contract.creatorId.email}}</p>
+    <p>Thời Gian Tạo: {{formatDate contract.createdAt}}</p>
+    <h3>Danh Sách Chữ Ký</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên Người Ký</th>
+                <th>Email</th>
+                <th>Thời Gian Ký</th>
+                <th>Trạng Thái Chữ Ký</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each signatures}}
+            <tr>
+                <td>{{userId.name}}</td>
+                <td>{{userId.email}}</td>
+                <td>{{formatDate createdAt}}</td>
+                <td>{{#if isValid}}Hợp Lệ{{else}}Không Hợp Lệ{{/if}}</td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="4">Chưa có chữ ký nào</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

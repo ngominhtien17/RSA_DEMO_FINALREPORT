@@ -1,4 +1,5 @@
 import Contract from '../models/Contract.js';
+import Signature from '../models/Signature.js';
 
 export const createContract = async (data) => {
     const contract = new Contract(data);
@@ -47,3 +48,19 @@ export const updateContractSigningStatus = async (contractId, userId, action) =>
   await contract.save();
   return contract;
 };
+
+// Danh sách hợp đồng admin
+export const getContracts = async () => {
+  const contracts = await Contract.find();
+  return contracts;
+}
+
+// Lấy thông tin hợp đồng và chữ ký
+export const getContractDetail = async (contractId) => {
+  const contract = await Contract.findById(contractId).populate('creatorId', 'email name');
+  const signatures = await Signature.find({ contractId }).populate('userId', 'email name');
+  if (!contract) {
+    throw new Error('Hợp đồng không tồn tại');
+  }
+  return { contract, signatures };
+}

@@ -32,12 +32,15 @@ app.engine('hbs', expressHandlebars.engine({
     helpers: {
         encodeURIComponent: function (str) {
             return encodeURIComponent(str);
+        },
+        formatDate: function (date) {
+            return date.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
     },
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true
-    }
+    },
 }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));

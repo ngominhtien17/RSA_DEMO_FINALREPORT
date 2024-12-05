@@ -30,7 +30,7 @@ export const register = async (req, res) => {
         }
 
         // Tạo user mới và lấy privateKey
-        const { user, privateKey } = await createUser({ 
+        const { user, privateKey, publicKey } = await createUser({ 
             name, 
             email, 
             password,
@@ -42,7 +42,7 @@ export const register = async (req, res) => {
         delete userResponse.password;
 
         // Chuyển hướng đến trang chúc mừng
-        res.redirect(`/users/success?privateKey=${encodeURIComponent(privateKey)}`);
+        res.redirect(`/users/success?privateKey=${encodeURIComponent(privateKey)}&publicKey=${encodeURIComponent(publicKey)}`);
     } catch (err) {
         res.status(500).json({ 
             error: 'Lỗi khi đăng ký: ' + err.message 

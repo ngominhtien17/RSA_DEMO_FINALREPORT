@@ -13,5 +13,5 @@ router.use('/', homeRoutes);
 router.use('/users', userRoutes);        // Route user
 router.use('/contracts', isAuthenticated, contractRoutes); // Route hợp đồng
 router.use('/auth', authRoutes); // Route đăng ký và đăng nhập
-router.use('/sign', isAuthenticated, signRoutes); // Route ký hợp đồng
+router.use('/signatures', isAuthenticated, signRoutes); // Route ký hợp đồng
 export default router;

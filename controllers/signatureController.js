@@ -1,4 +1,6 @@
-import { signContract, verifySignature } from '../services/SignatureService.js';
+import { signContractService } from '../services/SignatureService.js';
+
+
 
 // Trang ký hợp đồng
 export const sendContractPageController = async (req, res, next) => {
@@ -8,31 +10,22 @@ export const sendContractPageController = async (req, res, next) => {
 export const receiveContractPageController = async (req, res, next) => {
     res.render('signatures/receive');
 }
-//
+
+// Ký hợp đồng
 export const signContractController = async (req, res, next) => {
     try {
-        const { signatureData } = req.body;
-        await signContract(
-            req.params.contractId,
-            req.user.id,
-            signatureData
+        const contractId = req.params.contractId;
+        const userId = req.user.id;
+        const privateKey = req.file.path;
+        await signContractService(
+            contractId,
+            userId,
+            privateKey
         );
-        res.json({ message: 'Ký hợp đồng thành công' });
+        res.redirect('/contracts/user');
     } catch (error) {
         next(error);
     }
 }
 
-// Xác thực hợp đồng
-export const verifySignatureController = async (req, res, next) => {
-    try {
-        const isValid = await verifySignature(
-            req.params.contractId,
-            req.user.id
-        );
-        res.json({ isValid });
-    } catch (error) {
-        next(error);
-    }
-}
 

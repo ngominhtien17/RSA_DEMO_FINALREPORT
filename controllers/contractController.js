@@ -1,5 +1,4 @@
-import Contract from '../models/Contract.js';
-import { createContract, getContractsByUser, getContractById, getUserContracts, updateContractSigningStatus } from '../services/ContractService.js';
+import { createContract, getContractsByUser, getContractById, getUserContracts, getContractDetail, getContracts } from '../services/ContractService.js';
 import User from '../models/User.js';
 //trang tạo hợp đồng
 export const createContractPage = (req, res) => {
@@ -80,20 +79,30 @@ export const viewContractController = async (req, res, next) => {
         if (!contract) {
             return res.status(404).send('Hợp đồng không tồn tại');
         }
-        console.log(contract);
         res.render('contracts/viewContract', { contract });
     } catch (error) {
         next(error);
     }
 };
 
-// Ký hoặc từ chối hợp đồng
-export const signContractController = async (req, res, next) => {
+//Danh sách hợp đồng admin
+export const getContractAdminController = async (req, res, next) => {
     try {
-        const userId = req.user.id;
-        await updateContractSigningStatus(req.params.id, userId, req.body.action);
-        res.redirect('/contracts');
+        const contracts = await getContracts();
+        res.render('contracts/viewContractAdmin', { contracts });
     } catch (error) {
         next(error);
     }
-};
+}
+//Admin
+//Chi tiết hợp đồng
+export const getContractDetailController = async (req, res, next) => {
+    try {
+        const contractId = req.params.id;
+        const { contract, signatures } = await getContractDetail(contractId);
+
+        res.render('contracts/detailContractAdmin', { contract, signatures });
+    } catch (error) {
+        next(error);
+    }
+}

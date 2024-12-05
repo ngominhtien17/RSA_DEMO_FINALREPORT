@@ -26,14 +26,14 @@ export const createUser = async (userData) => {
             name,
             email,
             password: hashedPassword,
-            publicKey,
+            publicKey: publicKey.trim(),
             role
         });
         
         await user.save();
         
         // Trả về cả user và privateKey
-        return { user, privateKey };
+        return { user, privateKey, publicKey };
     } catch (error) {
         throw new Error(`Lỗi khi tạo user: ${error.message}`);
     }

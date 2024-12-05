@@ -1,0 +1,30 @@
+<div class="container mt-5"></div>
+    <h2 class="mb-4">Danh Sách Hợp Đồng</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tiêu Đề</th>
+                <th>Trạng Thái</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each contracts}}
+            <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.status}}</td>
+                <td>
+                    <a href="/contracts/detail/{{this.id}}" class="btn btn-info btn-sm">Xem Chi Tiết</a>
+                    <form action="" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="3" class="text-center">Không có hợp đồng nào</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

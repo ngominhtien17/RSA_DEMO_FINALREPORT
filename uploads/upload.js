@@ -15,14 +15,14 @@ const storage = multer.diskStorage({
 export const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        const filetypes = /pdf/;
+        const filetypes = /pdf|pem/; // Chấp nhận cả file PDF và PEM
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = filetypes.test(file.mimetype);
 
-        if (mimetype && extname) {
+        if (extname) { // Chỉ kiểm tra phần mở rộng
             return cb(null, true);
         } else {
-            cb('Error: Chỉ chấp nhận file PDF!');
+            cb('Error: Chỉ chấp nhận file PDF hoặc PEM!');
         }
     }
 });
