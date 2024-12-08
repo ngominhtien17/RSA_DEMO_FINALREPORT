@@ -185,3 +185,21 @@ export const deleteContract = async (req, res) => {
         res.status(500).send('Có lỗi xảy ra');
     }
 };
+
+//User
+//Xem hợp đồng
+export const getUserContractController = async (req, res, next) => {
+    try {
+        const contractId = req.params.id;
+        const { contract, signatures } = await getContractDetail(contractId);
+        if (!contract) {
+            return res.status(404).send('Hợp đồng không tồn tại');
+        }
+        res.render('contracts/detailContractUser', { 
+            contract,
+            signatures
+        });
+    } catch (error) {
+        next(error);
+    }
+}

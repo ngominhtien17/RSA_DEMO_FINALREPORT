@@ -1,8 +1,11 @@
-<div class="container mt-5">
-    <h2>Danh Sách Người Dùng</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
+<div class="wrapper">
+    <div class="content-page">
+        <div class="container mt-5">
+            <h2>Danh Sách Người Dùng</h2>
+            <div class="table-responsive">
+                <table id="datatable" class="table data-tables table-striped">
+            <thead>
+                <tr>
                 <th>Tên người dùng</th>
                 <th>Email</th>
                 <th>Hành Động</th>
@@ -27,7 +30,10 @@
             </tr>
             {{/each}}
         </tbody>
-    </table>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -40,6 +46,7 @@
         }).then(response => {
             if (response.ok) {
                 alert('Yêu cầu cấp lại khóa đã được duyệt.');
+                window.location.reload();
             } else {
                 alert('Có lỗi xảy ra, vui lòng thử lại.');
             }

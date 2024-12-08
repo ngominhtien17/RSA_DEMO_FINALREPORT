@@ -1,29 +1,40 @@
-    <div class="container mt-5">
-        <h2 class="mb-4">Tạo Hợp đồng</h2>
-        <form id="contractForm" action="/contracts/create" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="contractTitle" class="form-label">Tiêu đề hợp đồng</label>
-                <input type="text" class="form-control" name="title" id="contractTitle" placeholder="Nhập tiêu đề hợp đồng" required>
-            </div>
-            <div class="mb-3">
-                <label for="contractFile" class="form-label">Nội dung hợp đồng (PDF)</label>
-                <input type="file" class="form-control" name="contractFile" id="contractFile" accept=".pdf" required>
-                <div class="form-text">Vui lòng tải lên file PDF cho nội dung hợp đồng.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signerEmails" class="form-label">Danh sách email người ký</label>
-                <input type="text" class="form-control" name="signerEmails" id="signerEmails" placeholder="Nhập email người ký, cách nhau bằng dấu phẩy" required>
-                <div class="form-text">Bạn có thể nhập nhiều email, cách nhau bằng dấu phẩy.</div>
-            </div>
-            <button type="submit" class="btn btn-primary">Tạo Hợp đồng</button>
-            <button type="button" class="btn btn-secondary" onclick="goBack()">Quay lại</button>
-        </form>
-        <div id="resultMessage" class="mt-4" style="display: none;">
+
+
+
+    <div class="wrapper">
+        <div class="content-page">
+            <div class="container mt-5">
+                <h2 class="mb-4">Tạo Hợp đồng</h2>
+                <form id="contractForm" action="/contracts/create" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="contractTitle" class="form-label">Tiêu đề hợp đồng</label>
+                        <input type="text" class="form-control" name="title" id="contractTitle" placeholder="Nhập tiêu đề hợp đồng" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contractFile" class="form-label">Nội dung hợp đồng (PDF)</label>
+                        <input type="file" class="form-control" name="contractFile" id="contractFile" accept=".pdf" required>
+                        <div class="form-text">Vui lòng tải lên file PDF cho nội dung hợp đồng.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="signerEmails" class="form-label">Danh sách email người ký</label>
+                        <input type="text" class="form-control" name="signerEmails" id="signerEmails" placeholder="Nhập email người ký, cách nhau bằng dấu phẩy" required>
+                        <div class="form-text">Bạn có thể nhập nhiều email, cách nhau bằng dấu phẩy.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tạo Hợp đồng</button>
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Quay lại</button>
+                </form>
+            <div id="resultMessage" class="mt-4" style="display: none;">
             <div class="alert alert-success" role="alert">
-                Hợp đồng đã được tạo thành công và gửi đến người ký.
+                    Hợp đồng đã được tạo thành công và gửi đến người ký.
+                </div>
             </div>
         </div>
+        
+        </div>
+        <!-- Page end  -->
     </div>
+
+
 
     <script>
         function goBack() {

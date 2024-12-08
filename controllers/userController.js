@@ -7,17 +7,17 @@ import jwt from 'jsonwebtoken';
 
 // Trang đăng ký người dùng
 export const getRegister = (req, res) => {
-    res.render('users/register');
+    res.render('users/register', { layout: 'auth' });
 };
 // Trang đăng nhập người dùng
 export const getLogin = (req, res) => {
-    res.render('users/login');
+    res.render('users/login', { layout: 'auth' });
 };
 
 // Trang chúc mừng đăng ký thành công
 export const getSuccessPage = (req, res) => {
     const { privateKey } = req.query;
-    res.render('users/success', { privateKey });
+    res.render('users/success', { privateKey, layout: 'auth' });
 };
 
 // Đăng ký người dùng
@@ -157,9 +157,7 @@ export const getApproveKeyResetController = async (req, res) => {
     const userId = req.params.userId;
     const publicKey = req.query.publicKey;
     await getApproveKeyReset(userId, publicKey);
-    res.status(200).json({
-        message: 'Yêu cầu cấp lại khóa đã được duyệt'
-    });
+    res.redirect('/users/list-user');
 };
 
 //User

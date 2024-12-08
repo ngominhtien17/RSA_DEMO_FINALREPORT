@@ -1,30 +1,34 @@
-    <div class="container mt-5">
-        <h2 class="mb-4">Cập nhật Hợp đồng</h2>
-        <form id="contractForm" action="/contracts/update/{{contract._id}}" method="post" enctype="multipart/form-data">
+<div class="wrapper">
+    <div class="content-page">
+        <div class="container mt-5">
+            <h2 class="mb-4">Cập nhật Hợp đồng</h2>
+            <form id="contractForm" action="/contracts/update/{{contract._id}}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="contractTitle" class="form-label">Tiêu đề hợp đồng</label>
                 <input type="text" class="form-control" name="title" id="contractTitle" placeholder="Nhập tiêu đề hợp đồng" value="{{contract.title}}" required>
             </div>
-            <div class="mb-3">
-                <label for="contractFile" class="form-label">Nội dung hợp đồng (PDF)</label>
-                <div id="currentContractFile">
-                    <embed src="/{{contract.contractFilePath}}" type="application/pdf" width="100%" height="600px" />
-                </div>
-            </div>
-            <div class="mb-3">
+            <div class="mb-3"></div>
                 <label for="signerEmails" class="form-label">Danh sách email người ký</label>
                 <input type="text" class="form-control" name="signerEmails" id="signerEmails" placeholder="Nhập email người ký, cách nhau bằng dấu phẩy" value="{{emails}}" required>
                 <div class="form-text">Bạn có thể nhập nhiều email, cách nhau bằng dấu phẩy.</div>
             </div>
             <button type="submit" class="btn btn-primary">Cập nhật Hợp đồng</button>
             <button type="button" class="btn btn-secondary" onclick="goBack()">Quay lại</button>
+            <div class="mb-3">
+                <label for="contractFile" class="form-label">Nội dung hợp đồng (PDF)</label>
+                <div id="currentContractFile">
+                    <embed src="/{{contract.contractFilePath}}" type="application/pdf" width="100%" height="600px" />
+                </div>
+            </div>
         </form>
         <div id="resultMessage" class="mt-4" style="display: none;">
             <div class="alert alert-success" role="alert">
                 Hợp đồng đã được cập nhật thành công.
             </div>
+            </div>
         </div>
     </div>
+</div>
 
     <script>
         function goBack() {

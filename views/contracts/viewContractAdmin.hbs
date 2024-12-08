@@ -1,8 +1,12 @@
-<div class="container mt-5"></div>
+
+<div class="wrapper">
+<div class="content-page">
+<div class="container mt-5">
     <h2 class="mb-4">Danh Sách Hợp Đồng</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
+    <div class="table-responsive">
+        <table id="datatable" class="table data-tables table-striped">
+            <thead>
+                <tr>
                 <th>Tiêu Đề</th>
                 <th>Trạng Thái</th>
                 <th>Hành Động</th>
@@ -27,5 +31,8 @@
             </tr>
             {{/each}}
         </tbody>
-    </table>
+        </table>
+    </div>
+</div>
+</div>
 </div>

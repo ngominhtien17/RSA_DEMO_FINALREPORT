@@ -1,5 +1,5 @@
 import express from 'express';
-import { createContractController, getUserContractsController, createContractPage, viewContractController, getContractAdminController, getContractDetailController, updateContractPage, updateContractController, deleteContract } from '../controllers/contractController.js';
+import { createContractController, getUserContractsController, createContractPage, viewContractController, getContractAdminController, getContractDetailController, updateContractPage, updateContractController, deleteContract, getUserContractController } from '../controllers/contractController.js';
 const router = express.Router();
 import { upload } from '../uploads/upload.js';
 import { isAuthenticated, checkAdmin } from '../middlewares/authMiddleware.js';
@@ -22,5 +22,6 @@ router.get('/detail/:id', isAuthenticated, checkAdmin, getContractDetailControll
 router.get('/:id', isAuthenticated, viewContractController);
 //Xóa hợp đồng
 router.post('/delete/:id', isAuthenticated, checkAdmin, deleteContract);
-
+//Xem chi tiết hợp đồng trang user
+router.get('/detail-user/:id', isAuthenticated, getUserContractController);
 export default router;
