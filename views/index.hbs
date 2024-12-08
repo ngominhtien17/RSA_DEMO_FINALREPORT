@@ -3,9 +3,29 @@
     <p class="text-center mt-3">Sử dụng chữ ký số RSA để tạo và xác thực hợp đồng một cách an toàn.</p>
 
     <div class="text-center mt-5">
+        {{#ifEquals user.role 'admin'}}
         <a href="/contracts/create" class="btn btn-success btn-lg">Tạo Hợp Đồng</a>
+        {{/ifEquals}}
+        {{#ifEquals user.role 'user'}}
         {{!-- <a href="/sign/send" class="btn btn-primary btn-lg">Gửi Hợp Đồng</a> --}}
         <a href="/contracts/user" class="btn btn-success btn-lg">Hợp Đồng chờ ký</a>
+        {{/ifEquals}}
+        {{#ifEquals user.role 'admin'}}
         <a href="/contracts/admin-contracts" class="btn btn-info btn-lg">Quản lý hợp đồng</a>
+        {{/ifEquals}}
+        {{#ifEquals user.role 'admin'}}
+        <a href="/users/list-user" class="btn btn-warning btn-lg">Danh sách người dùng</a>
+        {{/ifEquals}}
+        {{#ifEquals user.role 'user'}}
+        {{#ifEquals user.keyResetRequest.requested false}}
+        <form action="/users/request-key-reset/{{user.id}}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-lg">Yêu cầu cấp lại khóa</button>
+        </form>
+        {{/ifEquals}}
+        {{#ifEquals user.keyResetRequest.requested true}}
+        <a href="#" class="btn btn-secondary btn-lg" disabled>Chờ duyệt để cấp lại khóa</a>
+        {{/ifEquals}}
+        {{/ifEquals}}
     </div>
 </div>
+

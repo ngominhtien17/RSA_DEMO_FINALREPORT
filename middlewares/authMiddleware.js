@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const isAuthenticated = (req, res, next) => {
     const token = req.cookies?.token; // Lấy token từ cookie
@@ -23,4 +26,20 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-export default isAuthenticated;
+const checkAdmin = (req, res, next) => {
+    if (req.user?.role !== 'admin') {
+        return res.status(403).json({ message: 'Truy cập bị từ chối: Không phải admin' });
+    }
+    next(); // Cho phép tiếp tục nếu là admin
+};
+
+export { isAuthenticated, checkAdmin };
+
+export const generateTemporaryToken = (userId,privateKey) => {
+    try{
+        return jwt.sign({ userId, privateKey }, process.env.JWT_SECRET, { expiresIn: '15m' });
+    } catch (error) {
+        console.error('Lỗi khi tạo token:', error.message);
+        throw new Error('Lỗi khi tạo token');
+    }
+};

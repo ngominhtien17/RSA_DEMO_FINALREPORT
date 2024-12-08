@@ -15,7 +15,8 @@
                 <td>{{this.status}}</td>
                 <td>
                     <a href="/contracts/detail/{{this.id}}" class="btn btn-info btn-sm">Xem Chi Tiết</a>
-                    <form action="" method="post" style="display:inline;">
+                    <a href="/contracts/update/{{this.id}}" class="btn btn-warning btn-sm">Cập nhật</a>
+                    <form action="/contracts/delete/{{this.id}}" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hợp đồng này không?');">
                         <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                     </form>
                 </td>

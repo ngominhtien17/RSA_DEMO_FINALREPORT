@@ -1,5 +1,5 @@
-import { signContractService } from '../services/SignatureService.js';
-
+import { signContractService, requestResignContractService } from '../services/SignatureService.js';
+import PublicKey from '../models/Publickey.js';
 
 
 // Trang ký hợp đồng
@@ -17,10 +17,19 @@ export const signContractController = async (req, res, next) => {
         const contractId = req.params.contractId;
         const userId = req.user.id;
         const privateKey = req.file.path;
+
+        //Tìm public key của user
+        const publicKeyObject = await PublicKey.findOne({ userId: userId, status: 'active' });
+
+        if (!publicKeyObject) {
+            throw new Error('Khóa công khai không tồn tại');
+        }
+        const publicKeyId = publicKeyObject._id;
         await signContractService(
             contractId,
             userId,
-            privateKey
+            privateKey,
+            publicKeyId
         );
         res.redirect('/contracts/user');
     } catch (error) {
@@ -28,4 +37,14 @@ export const signContractController = async (req, res, next) => {
     }
 }
 
+// Yêu cầu ký lại hợp đồng
+export const requestResignContractController = async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        await requestResignContractService(userId);
+        res.status(200).json({ message: 'Yêu cầu ký lại hợp đồng đã được gửi đi.' });
+    } catch (error) {
+        next(error);
+    }
+}
 

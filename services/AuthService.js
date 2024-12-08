@@ -19,7 +19,8 @@ export const generateToken = (user) => {
         publicKey: user.publicKey,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
-        role: user.role
+        role: user.role,
+        keyResetRequest: user.keyResetRequest
     };
 
     // Tạo token với secret key và thời gian hết hạn

@@ -1,5 +1,9 @@
-import { generateKeyPair, createUser, findUserByEmail, validatePassword } from '../services/UserService.js';
-import { generateToken, verifyToken } from '../services/AuthService.js';
+import { generateKeyPair , createUser, findUserByEmail, validatePassword, findUserById, findAllUsers, updateUserKeyResetRequest, getApproveKeyReset} from '../services/UserService.js';
+import { generateToken } from '../services/AuthService.js';
+import { generateTemporaryToken } from '../middlewares/authMiddleware.js';
+import { sendEmailWithLink } from '../services/emailService.js';
+import jwt from 'jsonwebtoken';
+
 
 // Trang đăng ký người dùng
 export const getRegister = (req, res) => {
@@ -30,7 +34,7 @@ export const register = async (req, res) => {
         }
 
         // Tạo user mới và lấy privateKey
-        const { user, privateKey, publicKey } = await createUser({ 
+        const { user, privateKey } = await createUser({ 
             name, 
             email, 
             password,
@@ -41,8 +45,14 @@ export const register = async (req, res) => {
         const userResponse = user.toObject();
         delete userResponse.password;
 
+        //Tạo token
+        const token = generateTemporaryToken(user._id.toString(),privateKey);
+
+        // Gửi email với liên kết tải khóa riêng tư
+        await sendEmailWithLink(email, token, user.name);
+
         // Chuyển hướng đến trang chúc mừng
-        res.redirect(`/users/success?privateKey=${encodeURIComponent(privateKey)}&publicKey=${encodeURIComponent(publicKey)}`);
+        res.redirect('/users/login');
     } catch (err) {
         res.status(500).json({ 
             error: 'Lỗi khi đăng ký: ' + err.message 
@@ -82,7 +92,7 @@ export const login = async (req, res) => {
         res.cookie('token', token, { 
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 10 * 60 * 1000,
             sameSite: 'lax',
         });
 
@@ -110,3 +120,55 @@ export const logout = (req, res) => {
     res.clearCookie('token');
     res.redirect('/users/login');
 };
+
+// Tải khóa riêng tư
+export const downloadKey = async (req, res) => {
+    const { token } = req.query;
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await findUserById(decoded.userId);
+        const privateKey = decoded.privateKey;
+        if (!user) {
+            return res.status(401).send('Không tìm thấy người dùng');
+        }
+        res.redirect(`/users/success?privateKey=${encodeURIComponent(privateKey)}`);
+    } catch (err) {
+        console.error('Lỗi xác thực hoặc tìm kiếm người dùng:', err.message);
+        res.status(401).send('Không có quyền truy cập trang tải khóa riêng tư');
+    }
+};
+
+//Admin
+//Danh sách người dùng
+export const getUserList = async (req, res) => {
+    try{
+        const users = await findAllUsers();
+        res.render('users/listUser', { users });
+    } catch (err) {
+        res.status(500).json({ 
+            error: 'Lỗi khi lấy danh sách người dùng: ' + err.message 
+        });
+    }
+};
+
+//Admin
+//Duyệt yêu cầu cấp lại khóa
+export const getApproveKeyResetController = async (req, res) => {
+    const userId = req.params.userId;
+    const publicKey = req.query.publicKey;
+    await getApproveKeyReset(userId, publicKey);
+    res.status(200).json({
+        message: 'Yêu cầu cấp lại khóa đã được duyệt'
+    });
+};
+
+//User
+//Yêu cầu cấp lại khóa
+export const getRequestKeyReset = async (req, res) => {
+    const userId = req.params.userId;
+    const user = await updateUserKeyResetRequest(userId);
+    console.log('user: ', user);
+    req.session.user = user;
+    res.redirect('/');
+};
+

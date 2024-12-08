@@ -12,6 +12,7 @@
                 <th>Email</th>
                 <th>Thời Gian Ký</th>
                 <th>Trạng Thái Chữ Ký</th>
+                <th>Hành Động</th>
             </tr>
         </thead>
         <tbody>
@@ -20,13 +21,38 @@
                 <td>{{userId.name}}</td>
                 <td>{{userId.email}}</td>
                 <td>{{formatDate createdAt}}</td>
-                <td>{{#if isValid}}Hợp Lệ{{else}}Không Hợp Lệ{{/if}}</td>
+                <td>{{#if isValid}}<span class="text-success">Hợp Lệ</span>{{else}}<span class="text-danger">Không Hợp Lệ</span>{{/if}}</td>
+                <td>
+                    {{#if isValid}}
+                    
+                    {{else}}
+                    <button class="btn btn-primary" onclick="requestResign('{{userId._id}}',)">Yêu cầu ký lại</button>
+                    {{/if}}
+                </td>
             </tr>
             {{else}}
             <tr>
-                <td colspan="4">Chưa có chữ ký nào</td>
+                <td colspan="5">Chưa có chữ ký nào</td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
+
+<script>
+    function requestResign(userId) {
+        // Gửi yêu cầu ký lại đến server
+        fetch(`/signatures/request-resign/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                alert('Yêu cầu ký lại đã được gửi.');
+            } else {
+                alert('Có lỗi xảy ra, vui lòng thử lại.');
+            }
+        });
+    }
+</script>

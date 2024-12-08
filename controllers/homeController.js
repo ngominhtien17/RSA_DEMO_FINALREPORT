@@ -1,6 +1,7 @@
 import { verifyToken } from '../services/AuthService.js';
-
+import { findUserById } from '../services/UserService.js';
 export const getHome = async (req, res) => {
+    //Lấy user từ session
     const token = req.cookies?.token;
     if (token) {
         const decoded = verifyToken(token);
@@ -8,6 +9,7 @@ export const getHome = async (req, res) => {
             req.user = decoded;
         }
     }
-    res.render('index', { user: req.user });
+    const userObject = await findUserById(req.user.id);
+    res.render('index', { user: userObject });
 }
 

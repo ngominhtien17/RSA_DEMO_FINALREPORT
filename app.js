@@ -35,6 +35,12 @@ app.engine('hbs', expressHandlebars.engine({
         },
         formatDate: function (date) {
             return date.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        },
+        ifEquals: function (arg1, arg2, options) {
+            return arg1 == arg2 ? options.fn(this) : options.inverse(this);
+        },
+        ifNotEquals: function (arg1, arg2, options) {
+            return arg1 != arg2 ? options.fn(this) : options.inverse(this);
         }
     },
     runtimeOptions: {

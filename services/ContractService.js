@@ -1,5 +1,8 @@
 import Contract from '../models/Contract.js';
 import Signature from '../models/Signature.js';
+import mongoose from 'mongoose';
+import User from '../models/User.js';
+import { checkAllSignatures } from './SignatureService.js';
 
 export const createContract = async (data) => {
     const contract = new Contract(data);
@@ -26,7 +29,7 @@ export const getContractById = async (contractId) => {
 
 // Lấy danh sách hợp đồng mà người dùng là người ký
 export const getUserContracts = async (userId) => {
-  const contracts = await Contract.find({ signerIds: userId });
+  const contracts = await Contract.find({ signerIds: userId }).populate('signatures', 'userId');
   return contracts;
 };
 
@@ -44,6 +47,7 @@ export const updateContractSigningStatus = async (contractId, userId, action) =>
   } else if (action === 'decline') {
       contract.signedBy = contract.signedBy.filter(id => id.toString() !== userId);
   }
+
 
   await contract.save();
   return contract;
@@ -64,3 +68,47 @@ export const getContractDetail = async (contractId) => {
   }
   return { contract, signatures };
 }
+
+// Cập nhật hợp đồng
+export const updateContract = async (contractId, data) => {
+  const contract = await Contract.findById(contractId);
+  if (!contract) {
+    throw new Error('Hợp đồng không tồn tại');
+  }
+
+  // Tách chuỗi signerEmails thành mảng
+  const emailArray = data.signerEmails.split(',');
+
+  // Tìm các ObjectId của người dùng tương ứng với các email
+  const users = await User.find({ email: { $in: emailArray } }).select('_id');
+  const signerIds = users.map(user => user._id);
+
+  // Cập nhật contract với signerIds mới
+  const updatedContract = await Contract.findByIdAndUpdate(
+    contractId,
+    { ...data, signerIds },
+    { new: true }
+  );
+  const allSigned = await checkAllSignatures(contractId);
+  if (allSigned) {
+    updatedContract.status = 'completed';
+    await updatedContract.save();
+  }
+  else {
+    updatedContract.status = 'pending';
+    await updatedContract.save();
+  }
+  return updatedContract;
+}
+
+// Xóa hợp đồng và các chữ ký liên quan
+export const deleteContractService = async (contractId) => {
+    // Xóa hợp đồng
+    const contract = await Contract.findByIdAndDelete(contractId);
+    if (!contract) {
+        throw new Error('Hợp đồng không tồn tại');
+    }
+
+    // Xóa các chữ ký liên quan
+    await Signature.deleteMany({ contractId });
+};

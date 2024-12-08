@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const SignatureSchema = new mongoose.Schema({
   contractId: { type: mongoose.Schema.Types.ObjectId, ref: 'Contract', required: true },
+  publicKeyId: { type: mongoose.Schema.Types.ObjectId, ref: 'PublicKey', required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   signatureData: { type: String, required: true },
   signedAt: { type: Date, default: Date.now },

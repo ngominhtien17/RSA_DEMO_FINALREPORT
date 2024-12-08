@@ -1,0 +1,48 @@
+<div class="container mt-5">
+    <h2>Danh Sách Người Dùng</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tên người dùng</th>
+                <th>Email</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.email}}</td>
+                <td>
+                    {{#if this.keyResetRequest.requested}}
+                        <button class="btn btn-primary" onclick="requestKeyReset('{{this._id}}', '{{this.publicKey}}')">Xác nhận cấp lại khóa</button>
+                    {{else}}
+                        <button class="btn btn-secondary" disabled>Cấp lại khóa</button>
+                    {{/if}}
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="3">Không có người dùng nào</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function requestKeyReset(userId, publicKey) {
+        fetch(`/users/approve-key-reset/${userId}?publicKey=${publicKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                alert('Yêu cầu cấp lại khóa đã được duyệt.');
+            } else {
+                alert('Có lỗi xảy ra, vui lòng thử lại.');
+            }
+        });
+    }
+</script>
