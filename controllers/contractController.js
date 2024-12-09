@@ -27,7 +27,7 @@ export const createContractController = async (req, res, next) => {
         };
 
         const contract = await createContract(contractData);
-        res.redirect('/');
+        res.redirect('/contracts/admin-contracts');
     } catch (error) {
         next(error);
     }

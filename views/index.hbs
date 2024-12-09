@@ -38,19 +38,19 @@
             </div>
             </div>          
         </div>
-        <div class="text-center mt-5"></div>
+        <div class="text-center mt-5">
         {{#ifEquals user.role 'user'}}
-        <p class="mt-3">Nếu bạn cần cấp lại khóa, vui lòng nhấn vào nút bên dưới:</p>
+        <p class="mt-3 text-center">Nếu bạn cần cấp lại khóa, vui lòng nhấn vào nút bên dưới:</p>
         {{#ifEquals user.keyResetRequest.requested false}}
         <form action="/users/request-key-reset/{{user.id}}" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-primary btn-lg">Yêu cầu cấp lại khóa</button>
+            <button type="submit" class="btn btn-primary mt-2">Yêu cầu cấp lại khóa</button>
         </form>
         {{/ifEquals}}
         {{#ifEquals user.keyResetRequest.requested true}}
-        <a href="#" class="btn btn-secondary btn-lg" disabled>Chờ duyệt để cấp lại khóa</a>
+        <a href="#" class="btn btn-secondary btn-lg"  disabled>Chờ duyệt để cấp lại khóa</a>
         {{/ifEquals}}
         {{/ifEquals}}   
-    </div>
+        </div>
         <!-- Page end  -->
     </div>
     </div>

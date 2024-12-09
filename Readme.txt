@@ -1,15 +1,37 @@
-Cấu hình môi trường
+# Tên Dự Án
 
-Tạo file `.env` và thêm các biến môi trường cần thiết:
-PORT='3000'
-MONGODB_URI=""
-JWT_SECRET=""
-SESSION_SECRET=""
-NODE_ENV=production
-COOKIE_SECRET=""
+## Giới thiệu
 
-Chạy ứng dụng
+Dự án này là một ứng dụng quản lý hợp đồng. Ứng dụng này được thiết kế để quản lý hợp đồng của các công ty.
 
-Sử dụng lệnh sau để chạy ứng dụng:
-yarn install
-yarn start/dev
+## Công nghệ sử dụng
+
+- **Ngôn ngữ lập trình**: NodeJS
+- **Framework**: ExpressJS
+- **Cơ sở dữ liệu**: MongoDB
+
+## Cài đặt
+
+Để cài đặt và chạy dự án này trên máy của bạn, hãy làm theo các bước sau:
+
+
+1. **Cài đặt các phụ thuộc**:
+   ```bash
+   npm install
+   ```
+
+2. **Chạy ứng dụng**:
+   ```bash
+   npm start
+   ```
+
+3. **Truy cập ứng dụng**:
+   - Mở trình duyệt và truy cập `http://localhost:3000` để xem ứng dụng.
+
+Tài khoản mặc định:
+- Admin:
+  - Email: ngotien20031705@gmail.com
+  - Password: 123456
+- User:
+  - Nên tạo tài khoản user mới để test phần gửi email.
+

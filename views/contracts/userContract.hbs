@@ -1,14 +1,14 @@
-<div class="wrapper"></div>
+<div class="wrapper">
     <div class="content-page">
         <div class="container mt-5">
             <h2 class="mb-4">Danh sách Hợp đồng của Tôi</h2>
             <p>Hợp Đồng đã ký: {{totalSigned}}</p>
             <p>Hợp Đồng chờ ký: {{totalPending}}</p>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Tiêu đề</th>
+            <div class="table-responsive">
+                <table id="datatable" class="table data-tables table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
                 <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
@@ -27,7 +27,9 @@
                 </td>
             </tr>
             {{/each}}
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
